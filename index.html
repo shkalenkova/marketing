@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Полина Шкаленкова — маркетолог, Прага</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --off-white: #FAFAF8;
+    --near-black: #1A1A1A;
+    --asphalt: #6B6B6B;
+    --light-gray: #E8E8E4;
+    --accent: #FF2D9B;
+    --accent-dim: rgba(255,45,155,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--off-white);
+    color: var(--near-black);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--near-black);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s cubic-bezier(.25,.1,.25,1), width 0.3s, height 0.3s, opacity 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring {
+    width: 56px; height: 56px;
+    border-color: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* TYPOGRAPHY */
+  .display { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; }
+  .caps { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; }
+  .accent-word { color: var(--accent); }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: padding 0.4s ease, background 0.4s ease, backdrop-filter 0.4s;
+  }
+  header.scrolled {
+    padding: 16px 80px;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--light-gray);
+  }
+  .header-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--near-black);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  nav { display: flex; gap: 40px; align-items: center; }
+  nav a {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--asphalt);
+    position: relative;
+    transition: color 0.2s;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 0.5px;
+    background: var(--near-black);
+    transition: width 0.3s cubic-bezier(.25,.1,.25,1);
+  }
+  nav a:hover { color: var(--near-black); }
+  nav a:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 8px 20px;
+    border: 0.5px solid var(--near-black);
+    color: var(--near-black) !important;
+    transition: background 0.3s, color 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--near-black); color: var(--off-white) !important; }
+  .nav-cta::after { display: none !important; }
+
+  /* HERO */
+  #hero {
+    min-height: auto;
+    padding: 120px 80px 80px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-label {
+    position: absolute;
+    top: 160px; right: 80px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    opacity: 0;
+    animation: fadeUp 1s ease 1.8s forwards;
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(64px, 8vw, 112px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+  .hero-h1 .line { display: block; overflow: hidden; }
+  .hero-h1 .line span {
+    display: block;
+    transform: translateY(110%);
+    animation: slideUp 1s cubic-bezier(.25,.1,.25,1) forwards;
+  }
+  .hero-h1 .line:nth-child(1) span { animation-delay: 0.2s; }
+  .hero-h1 .line:nth-child(2) span { animation-delay: 0.35s; }
+  .hero-h1 .line:nth-child(3) span { animation-delay: 0.5s; }
+  .hero-h1 .line:nth-child(4) span { animation-delay: 0.65s; }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+  }
+  .hero-sub {
+    max-width: 440px;
+    font-size: 15px;
+    color: var(--asphalt);
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .hero-cta-wrap {
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px;
+    border: 0.5px solid var(--near-black);
+    background: transparent;
+    color: var(--near-black);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.35s;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--near-black);
+    transition: height 0.35s cubic-bezier(.25,.1,.25,1);
+    z-index: 0;
+  }
+  .cta-btn:hover::before { height: 100%; }
+  .cta-btn:hover { color: var(--off-white); }
+  .cta-btn span { position: relative; z-index: 1; }
+  .cta-btn.accent { border-color: var(--accent); color: var(--accent); }
+  .cta-btn.accent::before { background: var(--accent); }
+  .cta-btn.accent:hover { color: #fff; }
+  .hero-small { font-size: 11px; color: var(--asphalt); letter-spacing: 0.08em; }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 0.5px solid var(--light-gray);
+    border-bottom: 0.5px solid var(--light-gray);
+    padding: 14px 0;
+    background: var(--near-black);
+    position: relative;
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 12s linear infinite;
+  }
+  .marquee-item {
+    flex-shrink: 0;
+    padding: 0 48px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    opacity: 0.7;
+  }
+  .marquee-item .dot {
+    color: var(--accent);
+    margin-left: 48px;
+    opacity: 1;
+  }
+
+  /* SECTIONS */
+  section { padding: 80px 80px; }
+  section.dark { background: var(--near-black); color: var(--off-white); }
+  section.dark .section-label { color: rgba(250,250,248,0.4); }
+  section.dark .section-label::before { background: rgba(250,250,248,0.2); }
+
+  .section-label {
+    display: flex; align-items: center; gap: 16px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--asphalt);
+    margin-bottom: 64px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 40px; height: 0.5px;
+    background: var(--asphalt);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 0;
+  }
+  .about-right { padding-top: 8px; }
+  .about-lead {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    color: var(--near-black);
+  }
+  .about-body {
+    font-size: 15px;
+    color: var(--asphalt);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .about-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 40px;
+  }
+  .tag {
+    padding: 6px 14px;
+    border: 0.5px solid var(--light-gray);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+  }
+
+  /* SERVICES */
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 80px;
+    gap: 40px;
+  }
+  .services-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    flex: 1;
+  }
+  .services-intro {
+    max-width: 320px;
+    font-size: 14px;
+    color: rgba(250,250,248,0.5);
+    line-height: 1.8;
+    padding-top: 8px;
+    flex-shrink: 0;
+  }
+  .services-list { display: flex; flex-direction: column; }
+  .service-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 40px;
+    align-items: start;
+    padding: 40px 0;
+    border-top: 0.5px solid rgba(250,250,248,0.1);
+    cursor: none;
+    transition: padding-left 0.4s cubic-bezier(.25,.1,.25,1);
+    position: relative;
+  }
+  .service-item:last-child { border-bottom: 0.5px solid rgba(250,250,248,0.1); }
+  .service-item:hover { padding-left: 16px; }
+  .service-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(250,250,248,0.25);
+    padding-top: 4px;
+    letter-spacing: 0.05em;
+  }
+  .service-content {}
+  .service-title {
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    color: var(--off-white);
+    transition: color 0.3s;
+  }
+  .service-item:hover .service-title { color: var(--accent); }
+  .service-desc { font-size: 14px; color: rgba(250,250,248,0.5); line-height: 1.8; }
+  .service-arrow {
+    font-size: 20px;
+    color: rgba(250,250,248,0.2);
+    transition: color 0.3s, transform 0.3s;
+    padding-top: 2px;
+  }
+  .service-item:hover .service-arrow { color: var(--accent); transform: translate(4px, -4px); }
+
+  /* WHY ME */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 80px;
+  }
+  .why-item {
+    padding: 48px;
+    border: 0.5px solid var(--light-gray);
+    margin: -0.25px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .why-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-dim);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .why-item:hover::before { opacity: 1; }
+  .why-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--light-gray);
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+  .why-item:hover .why-num { color: var(--accent); opacity: 0.3; }
+  .why-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .why-text {
+    font-size: 14px;
+    color: var(--asphalt);
+    line-height: 1.8;
+    position: relative; z-index: 1;
+  }
+
+  /* FORM */
+  #audit { background: var(--off-white); }
+  .form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .form-left {}
+  .form-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(36px, 4vw, 58px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  .form-sub {
+    font-size: 14px;
+    color: var(--asphalt);
+    line-height: 1.9;
+    max-width: 380px;
+  }
+  .form-right form { display: flex; flex-direction: column; gap: 0; }
+  .field-wrap { margin-bottom: 0; border-bottom: 0.5px solid var(--light-gray); }
+  .field-wrap:first-child { border-top: 0.5px solid var(--light-gray); }
+  .field-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    padding: 16px 0 6px;
+    transition: color 0.2s;
+  }
+  .field-wrap:focus-within .field-label { color: var(--accent); }
+  .field-input {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--near-black);
+    padding: 0 0 16px;
+    outline: none;
+    resize: none;
+  }
+  .field-input::placeholder { color: var(--light-gray); }
+  .radio-group, .check-group { padding: 12px 0 16px; display: flex; flex-direction: column; gap: 10px; }
+  .radio-item, .check-item {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--near-black); cursor: none;
+  }
+  .radio-item input, .check-item input { display: none; }
+  .radio-box, .check-box {
+    width: 16px; height: 16px;
+    border: 0.5px solid var(--asphalt);
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .check-box { border-radius: 0; }
+  .radio-item input:checked + .radio-box,
+  .check-item input:checked + .check-box {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .radio-item input:checked + .radio-box::after,
+  .check-item input:checked + .check-box::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    background: white;
+    transform: translate(-50%, -50%);
+  }
+  .submit-btn {
+    margin-top: 40px;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 32px;
+    background: var(--near-black);
+    color: var(--off-white);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 0;
+    background: var(--accent);
+    transition: height 0.35s cubic-bezier(.25,.1,.25,1);
+    z-index: 0;
+  }
+  .submit-btn:hover::before { height: 100%; }
+  .submit-btn span { position: relative; z-index: 1; }
+  .form-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--asphalt);
+    line-height: 1.7;
+  }
+
+  /* FINAL CTA */
+  #final-cta {
+    background: var(--near-black);
+    padding: 160px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 280px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+  .final-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.1;
+    color: var(--off-white);
+    max-width: 800px;
+    margin: 0 auto 24px;
+    position: relative; z-index: 1;
+  }
+  .final-sub {
+    font-size: 15px;
+    color: rgba(250,250,248,0.5);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.8;
+    position: relative; z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 80px;
+    border-top: 0.5px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--near-black);
+  }
+  .footer-right {
+    display: flex; gap: 32px; align-items: center;
+  }
+  .footer-link {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+  .footer-copy {
+    font-size: 11px;
+    color: var(--light-gray);
+  }
+
+  /* CASES placeholder */
+  .cases-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    border: 0.5px dashed var(--light-gray);
+    color: var(--asphalt);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ANIMATIONS */
+  @keyframes slideUp {
+    to { transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* PAIN SECTION — horizontal accordion */
+  #pains {
+    padding: 80px 0;
+    overflow: hidden;
+  }
+  #pains .section-label {
+    padding: 0 80px;
+    margin-bottom: 48px;
+  }
+  .pain-accordion {
+    display: flex;
+    height: 480px;
+    width: 100%;
+    border-top: 0.5px solid var(--light-gray);
+    border-bottom: 0.5px solid var(--light-gray);
+  }
+  .pain-panel {
+    flex: 1;
+    position: relative;
+    border-right: 0.5px solid var(--light-gray);
+    overflow: hidden;
+    transition: flex 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+    cursor: none;
+  }
+  .pain-panel:first-child { border-left: 0.5px solid var(--light-gray); }
+  .pain-panel:hover { flex: 3.5; }
+
+  /* collapsed state: big rotated number */
+  .pain-panel-num {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 120px;
+    font-weight: 300;
+    color: var(--light-gray);
+    line-height: 1;
+    white-space: nowrap;
+    transition: opacity 0.4s ease, color 0.4s ease;
+    user-select: none;
+    pointer-events: none;
+  }
+  .pain-panel:hover .pain-panel-num {
+    opacity: 0;
+  }
+
+  /* vertical label shown when collapsed */
+  .pain-panel-tag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    white-space: nowrap;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .pain-panel:hover .pain-panel-tag { opacity: 0; }
+
+  /* expanded content */
+  .pain-panel-inner {
+    position: absolute;
+    inset: 0;
+    padding: 48px 40px 48px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.45s ease 0.2s, transform 0.45s ease 0.2s;
+    pointer-events: none;
+    min-width: 280px;
+  }
+  .pain-panel:hover .pain-panel-inner {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  /* accent line on top of panel when hovered */
+  .pain-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .pain-panel:hover::before { transform: scaleX(1); }
+
+  /* background fill on hover */
+  .pain-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--near-black);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: 0;
+  }
+  .pain-panel:hover::after { opacity: 1; }
+
+  .pain-panel-num,
+  .pain-panel-tag,
+  .pain-panel-inner { z-index: 1; }
+
+  .pain-inner-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(250,250,248,0.3);
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+  }
+  .pain-inner-line {
+    width: 32px;
+    height: 0.5px;
+    background: var(--accent);
+    margin-bottom: 24px;
+  }
+  .pain-h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(28px, 2.5vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    color: var(--off-white);
+  }
+  .pain-text {
+    font-size: 13px;
+    color: rgba(250,250,248,0.55);
+    line-height: 1.8;
+    max-width: 320px;
+  }
+
+  @media (max-width: 900px) {
+    .pain-accordion {
+      flex-direction: column;
+      height: auto;
+    }
+    .pain-panel {
+      flex: none;
+      height: 80px;
+      border-right: none;
+      border-bottom: 0.5px solid var(--light-gray);
+      transition: height 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .pain-panel:first-child { border-left: none; }
+    .pain-panel:hover { flex: none; height: 320px; }
+    .pain-panel-tag {
+      transform: translate(-50%, -50%);
+    }
+    #pains .section-label { padding: 0 32px; }
+  }
+
+  /* TESTIMONIALS placeholder */
+  .testimonials-note {
+    padding: 80px;
+    text-align: center;
+    border: 0.5px dashed rgba(250,250,248,0.15);
+    color: rgba(250,250,248,0.3);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Line decoration */
+  .line-deco {
+    height: 0.5px;
+    background: var(--light-gray);
+    margin: 0 80px;
+  }
+
+  @media (max-width: 900px) {
+    header, section, footer { padding-left: 32px; padding-right: 32px; }
+    header.scrolled { padding-left: 32px; padding-right: 32px; }
+    .hero-h1 { font-size: clamp(48px, 10vw, 80px); }
+    .about-grid, .form-layout, .why-grid { grid-template-columns: 1fr; }
+    .services-header { flex-direction: column; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; }
+    .hero-cta-wrap { align-items: flex-start; }
+    nav { gap: 20px; }
+    .pain-sticky { padding: 0 32px; }
+    .pain-bg-num { font-size: 200px; }
+    .why-item { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="#" class="header-name">Полина Шкаленкова</a>
+  <nav>
+    <a href="#about">О себе</a>
+    <a href="#services">Услуги</a>
+    <a href="#why">Почему я</a>
+    <a href="#audit" class="nav-cta caps">Аудит</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-label caps">Маркетолог · Прага · 2024</div>
+  <h1 class="hero-h1">
+    <span class="line"><span>Маркетинг,</span></span>
+    <span class="line"><span>который работает</span></span>
+    <span class="line"><span>на быстрый</span></span>
+    <span class="line"><span><span class="accent-word">возврат</span> инвестиций</span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">
+      Я Полина Шкаленкова, маркетолог в Праге. Помогаю предпринимателям и компаниям выстраивать системный маркетинг: от стратегии до запущенных кампаний и измеримых результатов.
+    </p>
+    <div class="hero-cta-wrap">
+      <a href="#audit" class="cta-btn accent"><span>Записаться на бесплатный аудит</span> <span>→</span></a>
+      <span class="hero-small">Без обязательств · Ответ в течение 24 ч</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Системный маркетинг<span class="dot">·</span></span>
+    <span class="marquee-item">Быстрый ROI<span class="dot">·</span></span>
+    <span class="marquee-item">Прага<span class="dot">·</span></span>
+    <span class="marquee-item">Работаю как с собственным бизнесом<span class="dot">·</span></span>
+    <span class="marquee-item">Воронки на холодный трафик<span class="dot">·</span></span>
+    <span class="marquee-item">Стратегия и аудит<span class="dot">·</span></span>
+    <span class="marquee-item">Системный маркетинг<span class="dot">·</span></span>
+    <span class="marquee-item">Быстрый ROI<span class="dot">·</span></span>
+    <span class="marquee-item">Прага<span class="dot">·</span></span>
+    <span class="marquee-item">Работаю как с собственным бизнесом<span class="dot">·</span></span>
+    <span class="marquee-item">Воронки на холодный трафик<span class="dot">·</span></span>
+    <span class="marquee-item">Стратегия и аудит<span class="dot">·</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label reveal">О себе</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-h2 reveal">Я работаю с вашим бизнесом<br>как <span class="accent-word">со своим</span></h2>
+    </div>
+    <div class="about-right">
+      <p class="about-lead reveal reveal-delay-1">Большинство маркетологов думают гипотезами. Я думаю последствиями.</p>
+      <p class="about-body reveal reveal-delay-2">Потому что я сама строила бизнес с нуля без инвесторов, в условиях ограниченных бюджетов и кризисов. Я знаю, что значит принимать решения своими деньгами, когда каждая крона на счету. Этот опыт я применяю в работе с каждым клиентом.</p>
+      <p class="about-body reveal reveal-delay-3">Я живу и работаю в Чехии. Преподаю маркетинг в чешском институте. Работаю с международными компаниями и предпринимателями, которые хотят строить бизнес системно, а не на удачу.</p>
+      <p class="about-body reveal reveal-delay-4">У меня высшее маркетинговое и два дополнительных психологических образования — потому что маркетинг, который не понимает людей, не работает.</p>
+      <div class="about-tags reveal">
+        <span class="tag">Маркетинговое образование</span>
+        <span class="tag">×2 психологических</span>
+        <span class="tag">Чешский институт</span>
+        <span class="tag">Международные проекты</span>
+        <span class="tag">Прага</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINS ACCORDION -->
+<section id="pains">
+  <div class="section-label reveal" style="padding: 0 80px; margin-bottom: 48px;">Узнаёте себя?</div>
+  <div class="pain-accordion">
+
+    <div class="pain-panel reveal">
+      <div class="pain-panel-num">01</div>
+      <div class="pain-panel-tag">Мало заявок</div>
+      <div class="pain-panel-inner">
+        <div class="pain-inner-num">01 / 04</div>
+        <div class="pain-inner-line"></div>
+        <h3 class="pain-h3">Мало заявок<br>и клиентов</h3>
+        <p class="pain-text">Продукт есть. Экспертиза есть. Но поток клиентов непредсказуем, и каждый месяц — как рулетка.</p>
+      </div>
+    </div>
+
+    <div class="pain-panel reveal reveal-delay-1">
+      <div class="pain-panel-num">02</div>
+      <div class="pain-panel-tag">Реклама не окупается</div>
+      <div class="pain-panel-inner">
+        <div class="pain-inner-num">02 / 04</div>
+        <div class="pain-inner-line"></div>
+        <h3 class="pain-h3">Реклама есть,<br>но не окупается</h3>
+        <p class="pain-text">Деньги уходят в рекламные кабинеты, подрядчики отчитываются о кликах — но продаж нет.</p>
+      </div>
+    </div>
+
+    <div class="pain-panel reveal reveal-delay-2">
+      <div class="pain-panel-num">03</div>
+      <div class="pain-panel-tag">Только сарафан</div>
+      <div class="pain-panel-inner">
+        <div class="pain-inner-num">03 / 04</div>
+        <div class="pain-inner-line"></div>
+        <h3 class="pain-h3">Всё держится<br>на сарафане</h3>
+        <p class="pain-text">Бизнес работает, но нет системы. Клиенты приходят по рекомендациям — а это значит, что вы не контролируете рост.</p>
+      </div>
+    </div>
+
+    <div class="pain-panel reveal reveal-delay-3">
+      <div class="pain-panel-num">04</div>
+      <div class="pain-panel-tag">Новый рынок</div>
+      <div class="pain-panel-inner">
+        <div class="pain-inner-num">04 / 04</div>
+        <div class="pain-inner-line"></div>
+        <h3 class="pain-h3">Хочу выйти<br>на новый рынок</h3>
+        <p class="pain-text">Есть продукт и амбиции. Нужна стратегия входа, которая не сожжёт бюджет и репутацию на старте.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="dark">
+  <div class="section-label reveal">Услуги</div>
+  <div class="services-header">
+    <h2 class="services-h2 reveal">Чем я<br>помогаю</h2>
+    <p class="services-intro reveal reveal-delay-1">Каждый инструмент подбирается под задачу. Никаких шаблонных решений — только то, что работает для вашего бизнеса.</p>
+  </div>
+  <div class="services-list">
+    <div class="service-item reveal">
+      <div class="service-num">01</div>
+      <div class="service-content">
+        <div class="service-title">Стратегия и аудит</div>
+        <div class="service-desc">Разберёмся, где теряются клиенты, деньги и внимание. Вы получите конкретный план — не общие рекомендации, а пошаговую дорожную карту с приоритетами.</div>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-item reveal reveal-delay-1">
+      <div class="service-num">02</div>
+      <div class="service-content">
+        <div class="service-title">Воронки продаж на холодный трафик</div>
+        <div class="service-desc">Работаю с воронкой целиком: от первого касания до заявки. Специализируюсь на услугах, найме и образовательных продуктах.</div>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+    <div class="service-item reveal reveal-delay-2">
+      <div class="service-num">03</div>
+      <div class="service-content">
+        <div class="service-title">Личный бренд и продвижение через соцсети</div>
+        <div class="service-desc">Выстроим систему контента, которая работает на продажи, а не на охваты ради охватов. Вы становитесь узнаваемым экспертом в своей нише.</div>
+      </div>
+      <div class="service-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE 2 -->
+<div class="marquee-wrap" style="background: var(--accent);">
+  <div class="marquee-track" style="animation-direction: reverse; animation-duration: 12s;">
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Бесплатный аудит<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Первая встреча уже даст результат<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Без давления и обязательств<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Ответ в течение 24 часов<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Бесплатный аудит<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Первая встреча уже даст результат<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Без давления и обязательств<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+    <span class="marquee-item" style="color: white; opacity: 0.9;">Ответ в течение 24 часов<span class="dot" style="color: white; opacity: 0.4;">·</span></span>
+  </div>
+</div>
+
+<!-- WHY ME -->
+<section id="why">
+  <div class="section-label reveal">Почему я</div>
+  <h2 class="about-h2 reveal" style="max-width: 600px; margin-bottom: 0;">Почему клиенты<br>выбирают меня</h2>
+  <div class="why-grid">
+    <div class="why-item reveal">
+      <div class="why-num">01</div>
+      <div class="why-title">Предпринимательский опыт</div>
+      <p class="why-text">Я понимаю цену каждого решения, потому что сама принимала их своими деньгами.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-1">
+      <div class="why-num">02</div>
+      <div class="why-title">Понимаю местный рынок</div>
+      <p class="why-text">Живу здесь, работаю с чешскими компаниями, преподаю маркетинг в чешском институте. Это не переезд — это интеграция.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-2">
+      <div class="why-num">03</div>
+      <div class="why-title">Системный подход</div>
+      <p class="why-text">Никакого хаоса и экспериментов ради экспериментов. Каждое действие обосновано и направлено на результат.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-3">
+      <div class="why-num">04</div>
+      <div class="why-title">Психология + маркетинг</div>
+      <p class="why-text">Два психологических образования дают понимание, как люди принимают решения. Это делает коммуникацию точнее и убедительнее.</p>
+    </div>
+    <div class="why-item reveal reveal-delay-4" style="grid-column: 1 / -1;">
+      <div class="why-num">05</div>
+      <div class="why-title">Включённость</div>
+      <p class="why-text" style="max-width: 480px;">Каждый проект я веду как собственный бизнес — с полной отдачей и вниманием к деталям.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASES placeholder -->
+<section style="padding: 80px; background: var(--light-gray);">
+  <div class="section-label reveal" style="margin-bottom: 32px;">Результаты клиентов</div>
+  <h2 class="about-h2 reveal" style="margin-bottom: 48px;">Кейсы</h2>
+  <div class="cases-placeholder reveal">Кейсы с цифрами — скоро</div>
+</section>
+
+<!-- TESTIMONIALS placeholder -->
+<section class="dark" style="padding: 80px;">
+  <div class="section-label reveal">Отзывы</div>
+  <h2 class="services-h2 reveal" style="margin-bottom: 48px;">Что говорят клиенты</h2>
+  <div class="testimonials-note reveal">Отзывы клиентов — скоро</div>
+</section>
+
+<!-- AUDIT FORM -->
+<section id="audit">
+  <div class="section-label reveal">Бесплатный аудит</div>
+  <div class="form-layout">
+    <div class="form-left">
+      <h2 class="form-h2 reveal">Бесплатный аудит вашей маркетинговой ситуации</h2>
+      <p class="form-sub reveal reveal-delay-1">Заполните форму, я изучу ваш бизнес заранее, и на встрече вы сразу получите конкретные наблюдения, а не общие слова.</p>
+    </div>
+    <div class="form-right reveal reveal-delay-2">
+      <form onsubmit="handleSubmit(event)">
+
+        <div class="field-wrap">
+          <label class="field-label">Ваше имя *</label>
+          <input type="text" class="field-input" placeholder="Иван Новак" required>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Email или WhatsApp / Telegram *</label>
+          <input type="text" class="field-input" placeholder="email@domain.com" required>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Чем занимается ваш бизнес и кто ваш клиент?</label>
+          <textarea class="field-input" rows="3" placeholder="Опишите кратко..."></textarea>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Что сейчас не работает так, как хотелось бы?</label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Мало заявок и клиентов</label>
+            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Реклама есть, но не окупается</label>
+            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Нет системы — всё держится на сарафане</label>
+            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Хочу выйти на новый рынок или масштабироваться</label>
+            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Другое</label>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Какой маркетинг уже есть или пробовали?</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Платная реклама (Meta / Google)</label>
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Соцсети и контент</label>
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>SEO и сайт</label>
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Email-рассылки</label>
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Работали с маркетологом или агентством</label>
+            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Ничего системного — только сарафан</label>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Примерный ежемесячный бюджет на маркетинг</label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>До 500 €</label>
+            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>500 € — 2 000 €</label>
+            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>2 000 € — 5 000 €</label>
+            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>5 000 € и выше</label>
+            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>Пока нет бюджета — ищу стратегию</label>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Ссылка на ваш сайт или соцсети (необязательно)</label>
+          <input type="text" class="field-input" placeholder="https://...">
+        </div>
+
+        <button type="submit" class="submit-btn"><span>Отправить заявку на аудит →</span></button>
+        <p class="form-note">Я свяжусь с вами в течение 24 часов. Аудит бесплатный — без давления и обязательств.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="final-cta">
+  <div class="final-bg-text">ROI</div>
+  <h2 class="final-h2 reveal">Готовы разобраться, что мешает вашему маркетингу работать?</h2>
+  <p class="final-sub reveal reveal-delay-1">Запишитесь на бесплатный аудит. Я заранее изучу ваш сайт и соцсети, чтобы первая встреча уже дала вам конкретную пользу.</p>
+  <a href="#audit" class="cta-btn accent reveal reveal-delay-2" style="display: inline-flex;"><span>Записаться →</span></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Полина Шкаленкова — маркетолог, Прага</div>
+  <div class="footer-right">
+    <a href="#" class="footer-link">Instagram</a>
+    <a href="#" class="footer-link">LinkedIn</a>
+    <a href="#" class="footer-link">Telegram</a>
+    <span class="footer-copy">© 2024</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Header scroll
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.submit-btn');
+    btn.querySelector('span').textContent = 'Заявка отправлена ✓';
+    btn.style.background = '#1A1A1A';
+    btn.disabled = true;
+  }
+
+  // Radio/checkbox cursor
+  document.querySelectorAll('.radio-item, .check-item').forEach(item => {
+    item.style.cursor = 'none';
+    item.addEventListener('click', function() {
+      const input = this.querySelector('input');
+      if (input.type === 'checkbox') input.checked = !input.checked;
+      else input.checked = true;
+    });
+  });
+</script>
+</body>
+</html>
