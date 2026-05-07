@@ -862,39 +862,65 @@
     }
     .pain-panel {
       flex: none;
-      height: 72px;
+      height: 110px;
       border-right: none;
       border-left: none;
       border-bottom: 0.5px solid var(--light-gray);
-      transition: height 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+      /* height transition only, no opacity flash */
+      transition: height 0.65s cubic-bezier(0.77, 0, 0.175, 1);
       overflow: hidden;
     }
     .pain-panel:first-child { border-top: 0.5px solid var(--light-gray); }
-    .pain-panel.active-mobile { height: 300px; }
-    /* hide big number on mobile */
-    .pain-panel-num { display: none; }
-    /* show tag horizontally, left-aligned */
-    .pain-panel-tag {
-      transform: none;
-      top: 50%;
-      left: 24px;
-      transform: translateY(-50%);
-      font-size: 10px;
-      letter-spacing: 0.22em;
-    }
-    /* on active mobile panel, hide tag */
-    .pain-panel.active-mobile .pain-panel-tag { opacity: 0; }
-    /* expanded content shown on active */
+    /* no hover effect on mobile — use .active-mobile only */
+    .pain-panel:hover { flex: none; }
+    .pain-panel:hover::before { transform: scaleX(0); }
+    .pain-panel:hover::after { opacity: 0; }
+    .pain-panel:hover .pain-panel-inner { opacity: 0; transform: translateX(-16px); pointer-events: none; }
+
+    /* active state */
+    .pain-panel.active-mobile { height: 320px; }
+    .pain-panel.active-mobile::after { opacity: 1; }
+    .pain-panel.active-mobile::before { transform: scaleX(1); }
     .pain-panel.active-mobile .pain-panel-inner {
       opacity: 1;
       transform: translateX(0);
       pointer-events: auto;
     }
-    .pain-panel.active-mobile::after { opacity: 1; }
-    .pain-panel.active-mobile::before { transform: scaleX(1); }
-    /* smaller inner padding on mobile */
-    .pain-panel-inner { padding: 32px 24px 32px 24px; min-width: unset; }
-    .pain-h3 { font-size: clamp(24px, 7vw, 36px); }
+    .pain-panel.active-mobile .pain-panel-num { opacity: 0; }
+    .pain-panel.active-mobile .pain-panel-tag { opacity: 0; }
+
+    /* smaller number, visible in collapsed state */
+    .pain-panel-num {
+      position: absolute;
+      bottom: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 64px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    /* tag: horizontal below number */
+    .pain-panel-tag {
+      position: absolute;
+      top: auto;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    /* inner content padding on mobile */
+    .pain-panel-inner {
+      padding: 28px 24px;
+      min-width: unset;
+    }
+    .pain-h3 { font-size: clamp(22px, 6vw, 34px); }
     #pains .section-label { padding: 0 24px; }
     #pains { padding: 64px 0; }
   }
@@ -909,6 +935,95 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
+
+  /* THANK YOU PAGE */
+  #thankYouPage {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: var(--off-white);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  #thankYouPage.show {
+    display: flex;
+    opacity: 1;
+  }
+  .ty-accent-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin: 0 auto 32px;
+  }
+  .ty-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    margin-bottom: 24px;
+  }
+  .ty-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(36px, 6vw, 68px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--near-black);
+    max-width: 600px;
+    margin: 0 auto 24px;
+  }
+  .ty-text {
+    font-size: 15px;
+    color: var(--asphalt);
+    line-height: 1.8;
+    max-width: 400px;
+    margin: 0 auto 40px;
+  }
+  .ty-ig-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: var(--near-black);
+    color: var(--off-white);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.35s;
+    cursor: none;
+  }
+  .ty-ig-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 0;
+    background: var(--accent);
+    transition: height 0.35s cubic-bezier(.25,.1,.25,1);
+    z-index: 0;
+  }
+  .ty-ig-btn:hover::before { height: 100%; }
+  .ty-ig-btn span { position: relative; z-index: 1; }
+  .ty-back {
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--asphalt);
+    text-decoration: none;
+    cursor: none;
+    transition: color 0.2s;
+  }
+  .ty-back:hover { color: var(--near-black); }
 
   /* Line decoration */
   .line-deco {
@@ -946,6 +1061,16 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+
+<!-- THANK YOU PAGE -->
+<div id="thankYouPage">
+  <div class="ty-accent-line"></div>
+  <div class="ty-label">Заявка получена</div>
+  <h2 class="ty-h2">Спасибо, что заполнили форму!</h2>
+  <p class="ty-text">Я изучу ваш бизнес и свяжусь с вами в ближайшее время — чтобы первая встреча уже дала конкретную пользу.<br><br>А пока приглашаю к себе на страницу — там много полезного о маркетинге.</p>
+  <a href="https://www.instagram.com/polina_shkalenkova" target="_blank" class="ty-ig-btn"><span>Перейти в Instagram →</span></a>
+  <a href="#" class="ty-back" onclick="document.getElementById('thankYouPage').style.display='none'; return false;">← Вернуться на сайт</a>
+</div>
 
 <!-- MOBILE MENU OVERLAY -->
 <div class="mobile-menu" id="mobileMenu">
@@ -1198,6 +1323,11 @@
         </div>
 
         <div class="field-wrap">
+          <label class="field-label">Номер телефона *</label>
+          <input type="tel" name="phone" class="field-input" placeholder="+420 000 000 000" required>
+        </div>
+
+        <div class="field-wrap">
           <label class="field-label">Email или WhatsApp / Telegram *</label>
           <input type="text" name="contact" class="field-input" placeholder="email@domain.com" required>
         </div>
@@ -1208,13 +1338,13 @@
         </div>
 
         <div class="field-wrap">
-          <label class="field-label">Что сейчас не работает так, как хотелось бы?</label>
-          <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="problem" value="Мало заявок и клиентов"><span class="radio-box"></span>Мало заявок и клиентов</label>
-            <label class="radio-item"><input type="radio" name="problem" value="Реклама не окупается"><span class="radio-box"></span>Реклама есть, но не окупается</label>
-            <label class="radio-item"><input type="radio" name="problem" value="Нет системы — сарафан"><span class="radio-box"></span>Нет системы — всё держится на сарафане</label>
-            <label class="radio-item"><input type="radio" name="problem" value="Новый рынок / масштабирование"><span class="radio-box"></span>Хочу выйти на новый рынок или масштабироваться</label>
-            <label class="radio-item"><input type="radio" name="problem" value="Другое"><span class="radio-box"></span>Другое</label>
+          <label class="field-label">Что сейчас не работает так, как хотелось бы? (можно выбрать несколько)</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" name="problem[]" value="Мало заявок и клиентов"><span class="check-box"></span>Мало заявок и клиентов</label>
+            <label class="check-item"><input type="checkbox" name="problem[]" value="Реклама не окупается"><span class="check-box"></span>Реклама есть, но не окупается</label>
+            <label class="check-item"><input type="checkbox" name="problem[]" value="Нет системы — сарафан"><span class="check-box"></span>Нет системы — всё держится на сарафане</label>
+            <label class="check-item"><input type="checkbox" name="problem[]" value="Новый рынок / масштабирование"><span class="check-box"></span>Хочу выйти на новый рынок или масштабироваться</label>
+            <label class="check-item"><input type="checkbox" name="problem[]" value="Другое"><span class="check-box"></span>Другое</label>
           </div>
         </div>
 
@@ -1342,7 +1472,6 @@
     auditForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
-      const note = document.getElementById('formNote');
       btn.querySelector('span').textContent = 'Отправляем...';
       btn.disabled = true;
 
@@ -1354,10 +1483,11 @@
         });
         const data = await res.json();
         if (data.success) {
-          btn.querySelector('span').textContent = 'Заявка отправлена ✓';
-          btn.style.background = '#1A1A1A';
-          note.textContent = 'Спасибо! Я свяжусь с вами в течение 24 часов.';
-          note.style.color = 'var(--accent)';
+          // Show thank you page
+          const ty = document.getElementById('thankYouPage');
+          ty.style.display = 'flex';
+          requestAnimationFrame(() => { ty.style.opacity = '1'; });
+          window.scrollTo(0, 0);
         } else {
           btn.querySelector('span').textContent = 'Ошибка. Попробуйте снова';
           btn.disabled = false;
