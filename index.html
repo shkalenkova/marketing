@@ -118,6 +118,64 @@
   .nav-cta:hover { background: var(--near-black); color: var(--off-white) !important; }
   .nav-cta::after { display: none !important; }
 
+  /* MOBILE HAMBURGER */
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: none;
+    padding: 4px;
+    z-index: 200;
+  }
+  .burger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--near-black);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--off-white);
+    z-index: 150;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: auto; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--near-black);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--accent); }
+  .mobile-menu .menu-cta {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border: 0.5px solid var(--near-black);
+    margin-top: 8px;
+  }
+
   /* HERO */
   #hero {
     min-height: auto;
@@ -342,8 +400,8 @@
   .service-num {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 13px;
-    color: rgba(250,250,248,0.25);
+    font-size: 18px;
+    color: rgba(250,250,248,0.35);
     padding-top: 4px;
     letter-spacing: 0.05em;
   }
@@ -358,12 +416,29 @@
   .service-item:hover .service-title { color: var(--accent); }
   .service-desc { font-size: 14px; color: rgba(250,250,248,0.5); line-height: 1.8; }
   .service-arrow {
-    font-size: 20px;
-    color: rgba(250,250,248,0.2);
-    transition: color 0.3s, transform 0.3s;
-    padding-top: 2px;
+    width: 36px;
+    height: 36px;
+    border: 0.5px solid rgba(250,250,248,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    margin-top: 4px;
   }
-  .service-item:hover .service-arrow { color: var(--accent); transform: translate(4px, -4px); }
+  .service-arrow svg {
+    width: 14px;
+    height: 14px;
+    stroke: rgba(250,250,248,0.3);
+    transition: stroke 0.3s;
+  }
+  .service-item:hover .service-arrow {
+    border-color: var(--accent);
+    background: var(--accent);
+    transform: translate(3px, -3px);
+  }
+  .service-item:hover .service-arrow svg { stroke: #fff; }
 
   /* WHY ME */
   .why-grid {
@@ -787,17 +862,41 @@
     }
     .pain-panel {
       flex: none;
-      height: 80px;
+      height: 72px;
       border-right: none;
+      border-left: none;
       border-bottom: 0.5px solid var(--light-gray);
-      transition: height 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: height 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+      overflow: hidden;
     }
-    .pain-panel:first-child { border-left: none; }
-    .pain-panel:hover { flex: none; height: 320px; }
+    .pain-panel:first-child { border-top: 0.5px solid var(--light-gray); }
+    .pain-panel.active-mobile { height: 300px; }
+    /* hide big number on mobile */
+    .pain-panel-num { display: none; }
+    /* show tag horizontally, left-aligned */
     .pain-panel-tag {
-      transform: translate(-50%, -50%);
+      transform: none;
+      top: 50%;
+      left: 24px;
+      transform: translateY(-50%);
+      font-size: 10px;
+      letter-spacing: 0.22em;
     }
-    #pains .section-label { padding: 0 32px; }
+    /* on active mobile panel, hide tag */
+    .pain-panel.active-mobile .pain-panel-tag { opacity: 0; }
+    /* expanded content shown on active */
+    .pain-panel.active-mobile .pain-panel-inner {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .pain-panel.active-mobile::after { opacity: 1; }
+    .pain-panel.active-mobile::before { transform: scaleX(1); }
+    /* smaller inner padding on mobile */
+    .pain-panel-inner { padding: 32px 24px 32px 24px; min-width: unset; }
+    .pain-h3 { font-size: clamp(24px, 7vw, 36px); }
+    #pains .section-label { padding: 0 24px; }
+    #pains { padding: 64px 0; }
   }
 
   /* TESTIMONIALS placeholder */
@@ -819,17 +918,27 @@
   }
 
   @media (max-width: 900px) {
-    header, section, footer { padding-left: 32px; padding-right: 32px; }
-    header.scrolled { padding-left: 32px; padding-right: 32px; }
-    .hero-h1 { font-size: clamp(48px, 10vw, 80px); }
+    header { padding: 20px 24px; }
+    header.scrolled { padding: 14px 24px; }
+    section { padding-left: 24px; padding-right: 24px; }
+    footer { padding-left: 24px; padding-right: 24px; }
+    nav { display: none; }
+    .burger { display: flex; }
+    .mobile-menu { display: flex; }
+    .hero-h1 { font-size: clamp(40px, 10vw, 72px); }
     .about-grid, .form-layout, .why-grid { grid-template-columns: 1fr; }
     .services-header { flex-direction: column; }
     .hero-bottom { flex-direction: column; align-items: flex-start; }
     .hero-cta-wrap { align-items: flex-start; }
-    nav { gap: 20px; }
-    .pain-sticky { padding: 0 32px; }
-    .pain-bg-num { font-size: 200px; }
-    .why-item { padding: 32px; }
+    .service-item { grid-template-columns: 40px 1fr auto; gap: 16px; padding: 28px 0; }
+    .service-num { font-size: 14px; }
+    .service-title { font-size: 17px; }
+    .why-item { padding: 28px 20px; }
+    .why-num { font-size: 56px; }
+    .line-deco { margin: 0 24px; }
+    footer { flex-direction: column; gap: 20px; align-items: flex-start; }
+    .footer-right { gap: 20px; flex-wrap: wrap; }
+    #final-cta { padding: 100px 24px; }
   }
 </style>
 </head>
@@ -837,6 +946,14 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobileMenu()">О себе</a>
+  <a href="#services" onclick="closeMobileMenu()">Услуги</a>
+  <a href="#why" onclick="closeMobileMenu()">Почему я</a>
+  <a href="#audit" class="menu-cta" onclick="closeMobileMenu()">Аудит</a>
+</div>
 
 <!-- HEADER -->
 <header id="header">
@@ -847,11 +964,14 @@
     <a href="#why">Почему я</a>
     <a href="#audit" class="nav-cta caps">Аудит</a>
   </nav>
+  <button class="burger" id="burger" aria-label="Меню" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-label caps">Маркетолог · Прага · 2024</div>
+  <div class="hero-label caps">Маркетолог · Прага · 2026</div>
   <h1 class="hero-h1">
     <span class="line"><span>Маркетинг,</span></span>
     <span class="line"><span>который работает</span></span>
@@ -976,7 +1096,7 @@
         <div class="service-title">Стратегия и аудит</div>
         <div class="service-desc">Разберёмся, где теряются клиенты, деньги и внимание. Вы получите конкретный план — не общие рекомендации, а пошаговую дорожную карту с приоритетами.</div>
       </div>
-      <div class="service-arrow">↗</div>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
     </div>
     <div class="service-item reveal reveal-delay-1">
       <div class="service-num">02</div>
@@ -984,7 +1104,7 @@
         <div class="service-title">Воронки продаж на холодный трафик</div>
         <div class="service-desc">Работаю с воронкой целиком: от первого касания до заявки. Специализируюсь на услугах, найме и образовательных продуктах.</div>
       </div>
-      <div class="service-arrow">↗</div>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
     </div>
     <div class="service-item reveal reveal-delay-2">
       <div class="service-num">03</div>
@@ -992,7 +1112,7 @@
         <div class="service-title">Личный бренд и продвижение через соцсети</div>
         <div class="service-desc">Выстроим систему контента, которая работает на продажи, а не на охваты ради охватов. Вы становитесь узнаваемым экспертом в своей нише.</div>
       </div>
-      <div class="service-arrow">↗</div>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
     </div>
   </div>
 </section>
@@ -1067,64 +1187,67 @@
       <p class="form-sub reveal reveal-delay-1">Заполните форму, я изучу ваш бизнес заранее, и на встрече вы сразу получите конкретные наблюдения, а не общие слова.</p>
     </div>
     <div class="form-right reveal reveal-delay-2">
-      <form onsubmit="handleSubmit(event)">
+      <form id="auditForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="cdd89adf-fd36-4b08-8128-257e1fc17c55">
+        <input type="hidden" name="subject" value="Новая заявка на бесплатный аудит">
+        <input type="hidden" name="redirect" value="false">
 
         <div class="field-wrap">
           <label class="field-label">Ваше имя *</label>
-          <input type="text" class="field-input" placeholder="Иван Новак" required>
+          <input type="text" name="name" class="field-input" placeholder="Иван Новак" required>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Email или WhatsApp / Telegram *</label>
-          <input type="text" class="field-input" placeholder="email@domain.com" required>
+          <input type="text" name="contact" class="field-input" placeholder="email@domain.com" required>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Чем занимается ваш бизнес и кто ваш клиент?</label>
-          <textarea class="field-input" rows="3" placeholder="Опишите кратко..."></textarea>
+          <textarea name="business" class="field-input" rows="3" placeholder="Опишите кратко..."></textarea>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Что сейчас не работает так, как хотелось бы?</label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Мало заявок и клиентов</label>
-            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Реклама есть, но не окупается</label>
-            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Нет системы — всё держится на сарафане</label>
-            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Хочу выйти на новый рынок или масштабироваться</label>
-            <label class="radio-item"><input type="radio" name="problem"><span class="radio-box"></span>Другое</label>
+            <label class="radio-item"><input type="radio" name="problem" value="Мало заявок и клиентов"><span class="radio-box"></span>Мало заявок и клиентов</label>
+            <label class="radio-item"><input type="radio" name="problem" value="Реклама не окупается"><span class="radio-box"></span>Реклама есть, но не окупается</label>
+            <label class="radio-item"><input type="radio" name="problem" value="Нет системы — сарафан"><span class="radio-box"></span>Нет системы — всё держится на сарафане</label>
+            <label class="radio-item"><input type="radio" name="problem" value="Новый рынок / масштабирование"><span class="radio-box"></span>Хочу выйти на новый рынок или масштабироваться</label>
+            <label class="radio-item"><input type="radio" name="problem" value="Другое"><span class="radio-box"></span>Другое</label>
           </div>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Какой маркетинг уже есть или пробовали?</label>
           <div class="check-group">
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Платная реклама (Meta / Google)</label>
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Соцсети и контент</label>
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>SEO и сайт</label>
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Email-рассылки</label>
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Работали с маркетологом или агентством</label>
-            <label class="check-item"><input type="checkbox"><span class="check-box"></span>Ничего системного — только сарафан</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="Платная реклама (Meta / Google)"><span class="check-box"></span>Платная реклама (Meta / Google)</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="Соцсети и контент"><span class="check-box"></span>Соцсети и контент</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="SEO и сайт"><span class="check-box"></span>SEO и сайт</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="Email-рассылки"><span class="check-box"></span>Email-рассылки</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="Маркетолог или агентство"><span class="check-box"></span>Работали с маркетологом или агентством</label>
+            <label class="check-item"><input type="checkbox" name="marketing[]" value="Только сарафан"><span class="check-box"></span>Ничего системного — только сарафан</label>
           </div>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Примерный ежемесячный бюджет на маркетинг</label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>До 500 €</label>
-            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>500 € — 2 000 €</label>
-            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>2 000 € — 5 000 €</label>
-            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>5 000 € и выше</label>
-            <label class="radio-item"><input type="radio" name="budget"><span class="radio-box"></span>Пока нет бюджета — ищу стратегию</label>
+            <label class="radio-item"><input type="radio" name="budget" value="До 500 €"><span class="radio-box"></span>До 500 €</label>
+            <label class="radio-item"><input type="radio" name="budget" value="500–2 000 €"><span class="radio-box"></span>500 € — 2 000 €</label>
+            <label class="radio-item"><input type="radio" name="budget" value="2 000–5 000 €"><span class="radio-box"></span>2 000 € — 5 000 €</label>
+            <label class="radio-item"><input type="radio" name="budget" value="5 000 € и выше"><span class="radio-box"></span>5 000 € и выше</label>
+            <label class="radio-item"><input type="radio" name="budget" value="Пока нет бюджета"><span class="radio-box"></span>Пока нет бюджета — ищу стратегию</label>
           </div>
         </div>
 
         <div class="field-wrap">
           <label class="field-label">Ссылка на ваш сайт или соцсети (необязательно)</label>
-          <input type="text" class="field-input" placeholder="https://...">
+          <input type="text" name="website" class="field-input" placeholder="https://...">
         </div>
 
-        <button type="submit" class="submit-btn"><span>Отправить заявку на аудит →</span></button>
-        <p class="form-note">Я свяжусь с вами в течение 24 часов. Аудит бесплатный — без давления и обязательств.</p>
+        <button type="submit" class="submit-btn" id="submitBtn"><span>Отправить заявку на аудит →</span></button>
+        <p class="form-note" id="formNote">Я свяжусь с вами в течение 24 часов. Аудит бесплатный — без давления и обязательств.</p>
       </form>
     </div>
   </div>
@@ -1145,7 +1268,7 @@
     <a href="#" class="footer-link">Instagram</a>
     <a href="#" class="footer-link">LinkedIn</a>
     <a href="#" class="footer-link">Telegram</a>
-    <span class="footer-copy">© 2024</span>
+    <span class="footer-copy">© 2026</span>
   </div>
 </footer>
 
@@ -1177,16 +1300,33 @@
   }, { threshold: 0.12 });
   reveals.forEach(el => io.observe(el));
 
-  // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.submit-btn');
-    btn.querySelector('span').textContent = 'Заявка отправлена ✓';
-    btn.style.background = '#1A1A1A';
-    btn.disabled = true;
+  // Mobile menu
+  const mobileMenu = document.getElementById('mobileMenu');
+  const burger = document.getElementById('burger');
+  function toggleMobileMenu() {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMobileMenu() {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
   }
 
-  // Radio/checkbox cursor
+  // Mobile pain accordion — tap to expand
+  const painPanels = document.querySelectorAll('.pain-panel');
+  if (window.innerWidth <= 900) {
+    painPanels.forEach(panel => {
+      panel.addEventListener('click', () => {
+        const isActive = panel.classList.contains('active-mobile');
+        painPanels.forEach(p => p.classList.remove('active-mobile'));
+        if (!isActive) panel.classList.add('active-mobile');
+      });
+    });
+  }
+
+  // Radio/checkbox click
   document.querySelectorAll('.radio-item, .check-item').forEach(item => {
     item.style.cursor = 'none';
     item.addEventListener('click', function() {
@@ -1195,6 +1335,39 @@
       else input.checked = true;
     });
   });
+
+  // Web3Forms submission
+  const auditForm = document.getElementById('auditForm');
+  if (auditForm) {
+    auditForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const note = document.getElementById('formNote');
+      btn.querySelector('span').textContent = 'Отправляем...';
+      btn.disabled = true;
+
+      const formData = new FormData(auditForm);
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          btn.querySelector('span').textContent = 'Заявка отправлена ✓';
+          btn.style.background = '#1A1A1A';
+          note.textContent = 'Спасибо! Я свяжусь с вами в течение 24 часов.';
+          note.style.color = 'var(--accent)';
+        } else {
+          btn.querySelector('span').textContent = 'Ошибка. Попробуйте снова';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.querySelector('span').textContent = 'Ошибка. Попробуйте снова';
+        btn.disabled = false;
+      }
+    });
+  }
 </script>
 </body>
 </html>
